@@ -3,6 +3,11 @@ body {
   text-align: center;
 }
 
+.main-container{
+  display: flex;
+  flex-direction: row;
+}
+
 #canvas{
   border: 1px solid indigo;
 }
