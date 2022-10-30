@@ -6,6 +6,7 @@ const backgroundImg = new Image(); // Create new <img> element
 backgroundImg.src = "./images/road.png"; // Set source path
 const carImg = new Image();
 carImg.src = "./images/car.png";
+let intervalId;
 
 class Car {
   constructor(x, y, width, height) {
@@ -27,9 +28,10 @@ class Car {
     if (
       this.carXPosition < Wall.carXPosition + Wall.width &&
       this.carXPosition + this.width > Wall.carXPosition &&
-      this.carYposition < Wall.y + Wall.height &&
+      this.carYposition < Wall.carYposition + Wall.height &&
       this.height + this.carYposition > Wall.carYposition
     ) {
+      console.log("collision");
       return true;
     } else {
       return false;
@@ -59,7 +61,7 @@ class Wall extends Car {
 }
 
 //initial position is declared with new keyword
-const car = new Car(canvas.width / 2 - 25, canvas.height - 80);
+const car = new Car(canvas.width / 2 - 25, canvas.height - 80, 50, 75);
 let clearCanvas = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 };
@@ -76,6 +78,7 @@ window.addEventListener("keydown", (e) => {
   }
 });
 
+let wallCount = 0;
 let framecount = 0;
 let wallStorage = [];
 
@@ -84,7 +87,7 @@ let animationLoop = () => {
 
   if (framecount % 60 == 0) {
     let leftWall = new Wall(0, 10, 100, 10);
-    let rightWall = new Wall(canvas.width - 50, 10, -100, 10);
+    let rightWall = new Wall(canvas.width - 100, 10, 100, 10);
     wallStorage.push(leftWall);
     wallStorage.push(rightWall);
   }
@@ -95,8 +98,8 @@ let animationLoop = () => {
   for (let i = 0; i < wallStorage.length; i++) {
     wallStorage[i].wallMoveDown();
     if (car.collisionCheck(wallStorage[i])) {
-      console.log("T H A N K  G O D");
-      // clearInterval(intervalId);
+      console.log("omg");
+      clearInterval(intervalId);
     }
     wallStorage[i].drawWall();
   }
@@ -109,6 +112,6 @@ window.onload = () => {
   };
 
   function startGame() {
-    setInterval(animationLoop, 16);
+    intervalId = setInterval(animationLoop, 16);
   }
 };
