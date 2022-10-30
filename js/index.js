@@ -23,6 +23,19 @@ class Car {
     this.carXPosition += 10;
   }
 
+  collisionCheck(Wall) {
+    if (
+      this.carXPosition < Wall.carXPosition + Wall.width &&
+      this.carXPosition + this.width > Wall.carXPosition &&
+      this.carYposition < Wall.y + Wall.height &&
+      this.height + this.carYposition > Wall.carYposition
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   //draw method is needed as the car will be continuously drawn every frame, this method will take the dynamic
   //position coordinates of the car.
 
@@ -38,6 +51,10 @@ class Wall extends Car {
 
   wallMoveDown() {
     this.carYposition += 5;
+  }
+
+  drawWall() {
+    ctx.fillRect(this.carXPosition, this.carYposition, this.width, this.height);
   }
 }
 
@@ -67,9 +84,9 @@ let animationLoop = () => {
 
   if (framecount % 60 == 0) {
     let leftWall = new Wall(0, 10, 100, 10);
-    let rightWall = new Wall(canvas.width-50, 10, -100, 10);
+    let rightWall = new Wall(canvas.width - 50, 10, -100, 10);
     wallStorage.push(leftWall);
-    wallStorage.push(rightWall)
+    wallStorage.push(rightWall);
   }
 
   clearCanvas();
@@ -77,7 +94,11 @@ let animationLoop = () => {
 
   for (let i = 0; i < wallStorage.length; i++) {
     wallStorage[i].wallMoveDown();
-    wallStorage[i].drawCar();
+    if (car.collisionCheck(wallStorage[i])) {
+      console.log("T H A N K  G O D");
+      // clearInterval(intervalId);
+    }
+    wallStorage[i].drawWall();
   }
 
   car.drawCar();
