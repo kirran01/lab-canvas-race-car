@@ -29,9 +29,8 @@ class Car {
       this.carXPosition < Wall.carXPosition + Wall.width &&
       this.carXPosition + this.width > Wall.carXPosition &&
       this.carYposition < Wall.carYposition + Wall.height &&
-      this.height + this.carYposition > Wall.carYposition
+      this.carYposition + this.height > Wall.carYposition
     ) {
-      console.log("collision");
       return true;
     } else {
       return false;
@@ -81,6 +80,8 @@ window.addEventListener("keydown", (e) => {
 let wallCount = 0;
 let framecount = 0;
 let wallStorage = [];
+let scoreElement = document.getElementById("score");
+let scoreValue = 0;
 
 let animationLoop = () => {
   framecount++;
@@ -90,6 +91,8 @@ let animationLoop = () => {
     let rightWall = new Wall(canvas.width - 100, 10, 100, 10);
     wallStorage.push(leftWall);
     wallStorage.push(rightWall);
+    scoreValue++;
+    scoreElement.innerHTML = scoreValue;
   }
 
   clearCanvas();
@@ -98,7 +101,6 @@ let animationLoop = () => {
   for (let i = 0; i < wallStorage.length; i++) {
     wallStorage[i].wallMoveDown();
     if (car.collisionCheck(wallStorage[i])) {
-      console.log("omg");
       clearInterval(intervalId);
     }
     wallStorage[i].drawWall();
